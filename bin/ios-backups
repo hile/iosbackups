@@ -1,0 +1,52 @@
+#!/usr/bin/env python
+
+USAGE = """iOS device backup utility
+
+Fetch device information from iOS backups
+"""
+
+from systematic.shell import Script, ScriptCommand
+from iosbackups.backup import MobileDeviceBackups, iOSBackupError, DEFAULT_PATH
+
+class BackupCommand(ScriptCommand):
+    """Base command for backups
+
+    Parent class for backup commands
+    """
+    def parse_args(self, args):
+        self.backups = MobileDeviceBackups(args.backup_path)
+        self.backups.load()
+        return args
+
+
+class ListDeviceInfoCommand(BackupCommand):
+    """Show iOS device basic information
+
+    """
+    def print_info(self, backup):
+        script.message('{0:15} {1:12} {2:10} {3:10} {4} {5}'.format(
+            backup.info.imei,
+            backup.info.serial_number,
+            backup.info.product_name,
+            backup.info.product_type,
+            backup.info.last_backup_date,
+            backup.info.device_name,
+        ))
+
+    def run(self, args):
+        args = self.parse_args(args)
+        for serial, backup in self.backups.items():
+            if args.show_directory:
+                script.message(backup.path)
+            self.print_info(backup)
+
+
+script = Script(description=USAGE)
+script.add_argument('--backup-path', default=DEFAULT_PATH, help='Path to iOS backup directory')
+
+c = script.add_subcommand(ListDeviceInfoCommand('list', 'Show device info'))
+c.add_argument('-d', '--show-directory', action='store_true', help='Show directory hash')
+
+args = script.parse_args()
+
+
