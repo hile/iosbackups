@@ -9,6 +9,19 @@ All code is intended to use backups in read-only mode. Currently the script
 just shows device info, and loads common databases with sqlite wrapper for
 further processing.
 
+Example usage
+=============
+
+This is so rough code still it's not yet in pip.
+
+- Install with usual command
+
+    python setup.py install
+
+- List device info
+
+    ios-backups list
+
 TODO
 ====
 
