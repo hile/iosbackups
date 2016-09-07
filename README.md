@@ -12,7 +12,7 @@ further processing.
 Example usage
 =============
 
-This is so rough code still it's not yet in pip.
+This code is still so rough it's not yet in available with pip.
 
 - Install with usual command
 
@@ -21,6 +21,20 @@ This is so rough code still it's not yet in pip.
 - List device info
 
     ios-backups list
+
+API example
+===========
+
+Task: Get cursor for first iOSBackup object's SMS database, fetch raw messages.
+
+    from iosbackups.backup import MobileDeviceBackups
+    backups=MobileDeviceBackups()
+    backups.load()
+    cursor=backups[backups.keys()[0]].sms.cursor
+    cursor.execute("""select * from message""")
+    cursor.fetchall()
+
+More to come. This will be abstracted and linked to contacts, don't worry!
 
 TODO
 ====
